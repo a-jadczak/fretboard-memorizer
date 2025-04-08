@@ -1,30 +1,30 @@
 <script lang="ts">
-    import { calcFretsSlotWidth } from "../calc/fretboardCalculation";
+    import { calcFretsSlotWidth } from "../scripts/fretboardCalculation";
     import FretSlot from "./FretSlot.svelte";
+    import options from "../scripts/options.svelte";
 
-    const fretsCount: number = 12;
     const scaleLength: number = 648;
 
     const fretsSlotWidth: number[] = calcFretsSlotWidth(scaleLength, 12);
-
 </script>
 
 
 <div class="fretboard">
     <!-- Guitar tuning -->
     <div class="fret-column">
-        <div class="sound-symbol">e</div>
-        <div class="sound-symbol">B</div>
-        <div class="sound-symbol">G</div>
-        <div class="sound-symbol">D</div>
-        <div class="sound-symbol">A#</div>
-        <div class="sound-symbol">E</div>
+        {#each options.tunning as note}
+            <div class="sound-symbol">{note}</div>
+        {/each}
     </div>
 
-    {#each new Array(fretsCount) as _, i}
+    <!-- Fretboard -->
+    {#each new Array(options.fretsCount) as _, i}
         <div class="fret-column">
-            {#each new Array(6) as _}
-                <FretSlot width={fretsSlotWidth[i]}/>
+            {#each new Array(options.stringsCount) as _}
+                <FretSlot 
+                    width={fretsSlotWidth[i]}
+                    fretDistance={i}
+                />
             {/each}
         </div>
     {/each}
@@ -34,7 +34,7 @@
 <!-- Numeration -->
 <div class="fret-numeration-container">
     <div class="fret-numeration">0</div>
-    {#each new Array(12) as _, i}
+    {#each new Array(options.fretsCount) as _, i}
         <div
             class="fret-numeration"
             style="width: {fretsSlotWidth[i] / 5}vw;">
