@@ -1,28 +1,21 @@
 <script lang="ts">
-    const { width, fretDistance }: {width: number, fretDistance: number} = $props();
+  import type FretNote from "../types/FretNote";
 
-    const onFretClick = () => {
-        console.log(fretDistance);
-    }
+    const { width, fretDistance, fretboardNotes, position } = $props<{ width: number; fretDistance: number; fretboardNotes: FretNote[][], position: {x:number, y:number} }>();
 
     let active: boolean = $state(false);
+
+    $effect(() => {
+        active = fretboardNotes[position.y][position.x].active;
+    })
+
 </script>
 
-
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<!-- svelte-ignore event_directive_deprecated -->
-<!-- svelte-ignore a11y_click_events_have_key_events -->
 <div 
     class="fret-slot" 
-    style="width: {width / 5}vw;"
-    >
+    style="width: {width / 5}vw;">
     <div class="fret"></div>
-    <div class="string" 
-        class:active
-        on:mouseenter={() => active = true}
-        on:mouseleave={() => active = false}
-        on:click={onFretClick}
-    ></div>
+    <div class="string" class:active></div>
 </div>
 
 

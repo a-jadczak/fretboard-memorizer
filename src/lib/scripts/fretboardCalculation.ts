@@ -1,8 +1,11 @@
+import type FretNote from "../types/FretNote";
 import type { NoteSymbol } from "../types/NoteSymbol";
+import type Position from "../types/Position";
 import options from "./options.svelte";
 
 export const noteSymbols: NoteSymbol[] = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
+// Calculates the width of each fretSlot based on Selected Scale
 export const calcFretsSlotWidth = (scaleLength: number, fretsCount: number): number[] => 
 {
     const arr: number[] = [];
@@ -18,10 +21,10 @@ export const calcFretsSlotWidth = (scaleLength: number, fretsCount: number): num
     return arr;
 }
 
-export const initializeFretboard = (): NoteSymbol[][] => {
+export const initializeFretboard = (): FretNote[][] => {
     const { tunning, fretsCount, stringsCount } = options;
 
-    const arr: NoteSymbol[][] = [];
+    const arr: FretNote[][] = [];
 
     for (let i = 0; i < stringsCount; i++) {
         const stringTune: NoteSymbol = tunning[i];
@@ -29,7 +32,10 @@ export const initializeFretboard = (): NoteSymbol[][] => {
 
         for (let j = 0; j < fretsCount; j++) {
             // fretsCount + 1 to include the (zero fret)
-            arr[i].push(getFrettedNote(stringTune, j + 1));
+            arr[i].push({
+                note: getFrettedNote(stringTune, j + 1),
+                active: false
+            });
         }
         
     }
@@ -55,7 +61,7 @@ export const getFrettedNote = (stringNote: NoteSymbol, fretNumber: number): Note
     return noteSymbols[targetIndex];
 }
 
-export const getRandomFretPosition = () => {
+export const getRandomFretPosition = (): Position => {
     const { fretsCount, stringsCount } = options;
     
     const rndString = Math.floor(Math.random() * stringsCount);

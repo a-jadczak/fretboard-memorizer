@@ -2,39 +2,49 @@
     import { calcFretsSlotWidth } from "../scripts/fretboardCalculation";
     import FretSlot from "./FretSlot.svelte";
     import options from "../scripts/options.svelte";
+    import type FretNote from "../types/FretNote";
+
+    let { fretboardNotes }: { fretboardNotes: FretNote[][] } = $props();
+
+    const { fretsCount, tunning } = options;
 
     const scaleLength: number = 648;
-
     const fretsSlotWidth: number[] = calcFretsSlotWidth(scaleLength, 12);
+
 </script>
 
 
 <div class="fretboard">
+
     <!-- Guitar tuning -->
     <div class="fret-column">
-        {#each options.tunning as note}
+        {#each tunning as note}
             <div class="sound-symbol">{note}</div>
         {/each}
     </div>
 
     <!-- Fretboard -->
-    {#each new Array(options.fretsCount) as _, i}
-        <div class="fret-column">
-            {#each new Array(options.stringsCount) as _}
-                <FretSlot 
-                    width={fretsSlotWidth[i]}
-                    fretDistance={i}
-                />
-            {/each}
-        </div>
-    {/each}
+     <div class="frets">
+        {#each fretboardNotes as fretNotes, i}
+            <div class="fret-row">
+                {#each fretNotes as fretNote, j}
+                    <FretSlot
+                        fretboardNotes={fretboardNotes}
+                        position={{y: i, x: j}}
+                        width={fretsSlotWidth[j]}
+                        fretDistance={i}
+                    />
+                {/each}
+            </div>
+        {/each}
+    </div>
 
 </div>
 
 <!-- Numeration -->
 <div class="fret-numeration-container">
     <div class="fret-numeration">0</div>
-    {#each new Array(options.fretsCount) as _, i}
+    {#each new Array(fretsCount) as _, i}
         <div
             class="fret-numeration"
             style="width: {fretsSlotWidth[i] / 5}vw;">
@@ -55,6 +65,18 @@
     .fret-column {
         display: flex;
         flex-direction: column;
+    }
+
+    .frets {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .fret-row {
+        display: flex;
+        flex: 1;
+        flex-direction: row;
     }
 
     .sound-symbol {
