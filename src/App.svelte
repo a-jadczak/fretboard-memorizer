@@ -1,52 +1,33 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import Fretboard from "./lib/components/Fretboard.svelte";
   import Options from "./lib/components/Options.svelte";
-  import { getRandomFretPosition, initializeFretboard, noteSymbols } from "./lib/scripts/fretboardCalculation";
-  import type FretNote from "./lib/types/FretNote";
-  import type { NoteSymbol } from "./lib/types/NoteSymbol";
+  import { Fretboard as FretBoardClass, noteSymbols } from "./lib/scripts/fretboard.svelte";
+  import options from "./lib/scripts/options.svelte";
   import "./styles/style.scss"
-  import type Position from "./lib/types/Position";
+  import Fretboard from "./lib/components/Fretboard.svelte";
+  import { getColor } from "./lib/constants/noteColorMapper";
   
-  let fretboardNotes: FretNote[][] = $state(initializeFretboard());
-  let randomNotePos : Position = $state({x: -1, y: -1});
+  const fretboard = new FretBoardClass(options);
 
-  const check = (note: NoteSymbol) => {
-    const {x, y} = randomNotePos;
-
-    const correctNote = fretboardNotes[y][x]
-
-    if (correctNote.note === note) {
-      console.log("yes")
-      fretboardNotes[y][x].active = false;
-      pickRandomNote();
-    } else {
-      console.log("no")
+  // To avoid multpiple $effect trigger
+  let lastOptionsJSON: string = $state("");
+  $effect(() => {
+    // To avoid multpiple $effect trigger
+    const json = JSON.stringify(options);
+    if (json !== lastOptionsJSON) {
+      lastOptionsJSON = json;
+      fretboard.setFretboard(options);
     }
-  }
-
-  const pickRandomNote = () => {
-    const {x, y} = getRandomFretPosition();
-    randomNotePos = {x: x, y: y}
-
-    fretboardNotes[y][x].active = true;
-    console.log(fretboardNotes[y][x].note)
-  }
-
-  onMount(() => {
-    pickRandomNote();
   })
-
-  
 </script>
 
 <Options/>
-<Fretboard fretboardNotes={fretboardNotes}/>
+<Fretboard fretboard={fretboard}/>
 
 {#each noteSymbols as note}
-  <button 
+  <button
+    style="background-color: {getColor(note)};"
     class="guess-note-button"
-    onclick={() => { check(note) }}
+    onclick={() => { fretboard.checkNote(note, options) }}
   >
     {note}
   </button>

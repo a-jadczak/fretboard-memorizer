@@ -1,7 +1,7 @@
 <script lang="ts">
   import type FretNote from "../types/FretNote";
 
-    const { width, fretDistance, fretboardNotes, position } = $props<{ width: number; fretDistance: number; fretboardNotes: FretNote[][], position: {x:number, y:number} }>();
+    const { width, fretboardNotes, position } = $props<{ width: number; fretDistance: number; fretboardNotes: FretNote[][], position: {x:number, y:number} }>();
 
     let active: boolean = $state(false);
 

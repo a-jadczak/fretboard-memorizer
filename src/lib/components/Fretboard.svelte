@@ -1,15 +1,20 @@
 <script lang="ts">
-    import { calcFretsSlotWidth } from "../scripts/fretboardCalculation";
     import FretSlot from "./FretSlot.svelte";
     import options from "../scripts/options.svelte";
-    import type FretNote from "../types/FretNote";
 
-    let { fretboardNotes }: { fretboardNotes: FretNote[][] } = $props();
+    let props = $props();
 
-    const { fretsCount, tunning } = options;
+    let fretsCount = $state(options.fretsCount);
+    let tunning = $state(options.tunning);
 
     const scaleLength: number = 648;
-    const fretsSlotWidth: number[] = calcFretsSlotWidth(scaleLength, 12);
+    let fretsSlotWidth: number[] = $state(props.fretboard.calcFretsSlotWidth(scaleLength, fretsCount));
+
+    $effect(() => { 
+        tunning = options.tunning
+        fretsCount = options.fretsCount
+        fretsSlotWidth = props.fretboard.calcFretsSlotWidth(scaleLength, fretsCount);
+    })
 
 </script>
 
@@ -25,11 +30,11 @@
 
     <!-- Fretboard -->
      <div class="frets">
-        {#each fretboardNotes as fretNotes, i}
+        {#each props.fretboard.getFretboard() as fretNotes, i}
             <div class="fret-row">
                 {#each fretNotes as fretNote, j}
                     <FretSlot
-                        fretboardNotes={fretboardNotes}
+                        fretboardNotes={props.fretboard.getFretboard()}
                         position={{y: i, x: j}}
                         width={fretsSlotWidth[j]}
                         fretDistance={i}
@@ -44,7 +49,7 @@
 <!-- Numeration -->
 <div class="fret-numeration-container">
     <div class="fret-numeration">0</div>
-    {#each new Array(fretsCount) as _, i}
+    {#each {length: fretsCount} as _, i}
         <div
             class="fret-numeration"
             style="width: {fretsSlotWidth[i] / 5}vw;">
