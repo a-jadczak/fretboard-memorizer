@@ -5,17 +5,32 @@
 
     let active: boolean = $state(false);
 
+    let stringCounter = $state(position.y);
+
+    const guitarStringsThickness: number[] = [
+        0.009, 0.03, 0.05, 0.06, 
+        0.09, 0.1, 0.12, 0.15
+    ];
+
+
     $effect(() => {
         active = fretboardNotes[position.y][position.x].active;
+        console.log(position)
     })
 
 </script>
 
 <div 
     class="fret-slot" 
-    style="width: {width / 5}vw;">
+    style="width: {width}%;">
     <div class="fret"></div>
-    <div class="string" class:active></div>
+    <div
+        class:active
+        style="border: {guitarStringsThickness[stringCounter]}em solid {active ? "lawngreen" : "darkgray"}"
+        class="string" 
+    >
+
+    </div>
 </div>
 
 
@@ -27,12 +42,16 @@
 
         background-color: saddlebrown;
         padding: .4em 0em;
+
     }
 
     .string {
         position: absolute;
         width: 100%;
-        border: .05em solid darkgray;
+        top: 40%;
+
+
+        border: .009em solid darkgray;
     }
 
     .fret {
@@ -44,7 +63,6 @@
     }
 
     .active {
-        border: .05em solid lawngreen;
         box-shadow: 0px 0px .2em .05em lawngreen;
     }
 

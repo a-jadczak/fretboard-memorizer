@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { noteSymbols } from "../scripts/fretboard.svelte";
+    import { noteSymbols } from "../scripts/fretboard.svelte";
     import options from "../scripts/options.svelte";
     import type { NoteSymbol } from "../types/NoteSymbol";
     import type { TunningOptionsKey } from "../types/TunningOptionsKey";
@@ -17,7 +17,6 @@
     let selectedTunning: NoteSymbol[] | undefined = $state(tunningOptions.get(selectedTunningKey));
     let selectedSingleNote: NoteSymbol = $state("E");
     let numberOfFrets: number = $state(5);
-
 
 
     const setTunning = (noteSymbols: NoteSymbol[]) => {

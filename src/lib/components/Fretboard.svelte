@@ -1,6 +1,7 @@
 <script lang="ts">
     import FretSlot from "./FretSlot.svelte";
     import options from "../scripts/options.svelte";
+  import { getColor } from "../constants/noteColorMapper";
 
     let props = $props();
 
@@ -24,7 +25,7 @@
     <!-- Guitar tuning -->
     <div class="fret-column">
         {#each tunning as note}
-            <div class="sound-symbol">{note}</div>
+            <div class="sound-symbol" style="background-color: {getColor(note)};">{note}</div>
         {/each}
     </div>
 
@@ -32,7 +33,7 @@
      <div class="frets">
         {#each props.fretboard.getFretboard() as fretNotes, i}
             <div class="fret-row">
-                {#each fretNotes as fretNote, j}
+                {#each fretNotes as _, j}
                     <FretSlot
                         fretboardNotes={props.fretboard.getFretboard()}
                         position={{y: i, x: j}}
@@ -48,11 +49,13 @@
 
 <!-- Numeration -->
 <div class="fret-numeration-container">
-    <div class="fret-numeration">0</div>
+    <div class="fret-numeration" style="flex-shrink: 0;">
+        <span>0</span>
+    </div>
     {#each {length: fretsCount} as _, i}
         <div
             class="fret-numeration"
-            style="width: {fretsSlotWidth[i] / 5}vw;">
+            style="width: {fretsSlotWidth[i]}%;">
             <span>{i+1}</span>
         </div>
     {/each}
@@ -60,9 +63,9 @@
 
 <style lang="scss">
     $default-fret-width: 1.75em;
+
     .fretboard {
         width: 100%;
-
         display: flex;
         flex-direction: row;
     }
@@ -76,12 +79,14 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
+        width: 100%;
     }
 
     .fret-row {
         display: flex;
         flex: 1;
         flex-direction: row;
+        width: 100%;
     }
 
     .sound-symbol {
@@ -89,7 +94,7 @@
         place-items: center;
         width: $default-fret-width;
 
-        border: 2px solid black;
+        border: .125em solid black;
     }
 
     .fret-numeration-container {
