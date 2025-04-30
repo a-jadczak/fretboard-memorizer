@@ -9,6 +9,7 @@
     let tunning = $state(options.tunning);
 
     const scaleLength: number = 648;
+    const fretsMarker: number[] = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
     let fretsSlotWidth: number[] = $state(props.fretboard.calcFretsSlotWidth(scaleLength, fretsCount));
 
     $effect(() => { 
@@ -16,6 +17,8 @@
         fretsCount = options.fretsCount
         fretsSlotWidth = props.fretboard.calcFretsSlotWidth(scaleLength, fretsCount);
     })
+
+    
 
 </script>
 
@@ -25,7 +28,8 @@
     <!-- Guitar tuning -->
     <div class="fret-column">
         {#each tunning as note}
-            <div class="sound-symbol" style="background-color: {getColor(note)};">{note}</div>
+            <div class="sound-symbol" 
+            style="color: {getColor(note)};">{note}</div>
         {/each}
     </div>
 
@@ -56,7 +60,7 @@
         <div
             class="fret-numeration"
             style="width: {fretsSlotWidth[i]}%;">
-            <span>{i+1}</span>
+            <span>{ fretsMarker.includes(i+1) ? (i+1) : ' ' }</span>
         </div>
     {/each}
 </div>

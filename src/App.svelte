@@ -3,6 +3,7 @@
   import { Fretboard as FretBoardClass, noteSymbols } from "./lib/scripts/fretboard.svelte";
   import options from "./lib/scripts/options.svelte";
   import "./styles/style.scss"
+  import 'bulma/css/bulma.min.css';
   import Fretboard from "./lib/components/Fretboard.svelte";
   import { getColor } from "./lib/constants/noteColorMapper";
   
@@ -18,24 +19,34 @@
       fretboard.setFretboard(options);
     }
   })
+  
+  function applyNoteStyle(e: MouseEvent, color: string | undefined) {
+    const target = e.target as HTMLElement;
+    target.style.boxShadow = `0 .01em .1em ${color}`;
+    target.style.border = `.1em solid ${color}`;
+  }
+
 </script>
 
 <Options/>
 <Fretboard fretboard={fretboard}/>
 
-{#each noteSymbols as note}
-  <button
-    style="background-color: {getColor(note)};"
-    class="guess-note-button"
-    onclick={() => { fretboard.checkNote(note, options) }}
-  >
-    {note}
-  </button>
-{/each}
+<div class="has-text-centered">
+  {#each noteSymbols as note}
+    <button
+      style="
+        color: {getColor(note)};
+        boxShadow: 0 .01em .1em {getColor(note)};
+        border: .1em solid {getColor(note)};
+      "
+      class="button is-inline-block m-1 is-primary is-inverted"
+      onclick={() => { fretboard.checkNote(note, options) }}
+    >
+      {note}
+    </button>
+  {/each}
+</div>
 
 <style>
-  .guess-note-button {
-    padding: .2em;
-  }
 
 </style>
