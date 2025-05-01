@@ -3,12 +3,12 @@
 
     const { width, fretboardNotes, position } = $props<{ width: number; fretDistance: number; fretboardNotes: FretNote[][], position: {x:number, y:number} }>();
 
-    let active: boolean = $state(false);
+    let stringActive: boolean = $state(false);
 
     const guitarStringThickness: number = 0.07;
 
     $effect(() => {
-        active = fretboardNotes[position.y][position.x].active;
+        stringActive = fretboardNotes[position.y][position.x].active;
         console.log(position)
     })
 
@@ -19,8 +19,7 @@
     style="width: {width}%;">
     <div class="fret"></div>
     <div
-        class:active
-        style="border: {guitarStringThickness}em solid {active ? "lawngreen" : "darkgray"}"
+        class:stringActive
         class="string" 
     >
 
@@ -28,24 +27,43 @@
 </div>
 
 
-<style>
+<style lang="scss">
     .fret-slot {
         height: 100%;
         display: flex;
         position: relative;
-
-        background-color: saddlebrown;
         padding: .4em 0em;
-
     }
 
-    .string {
+    .string, .string-active {
         position: absolute;
         width: 100%;
         top: 40%;
+        height: .25em;
+    }
 
+    .string {
+        background: 
+            repeating-linear-gradient(
+            123deg, #545454,
+            #545454 .025em,
+            #666666 .07em, 
+            #666666 .3em);
+        border-top: .01em solid black;
+        border-bottom: .01em solid black;
+    }
 
-        border: 0.07em solid darkgray;
+    .stringActive {
+        background: 
+            repeating-linear-gradient(
+            123deg, lawngreen,
+            lawngreen .025em,
+            rgb(99, 193, 6) .07em, 
+            rgb(99, 193, 6) .3em);
+    
+        border-top: .01em solid lawngreen;
+        border-bottom: .01em solid lawngreen;
+        box-shadow: 0px 0px .2em .05em lawngreen;
     }
 
     .fret {
@@ -53,7 +71,7 @@
         position: absolute;
         width: 100%;
         height: 100%;
-        border-right: .1em solid gray;
+        border-right: .2em solid gray;
     }
 
     .circle {

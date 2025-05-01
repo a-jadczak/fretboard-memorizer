@@ -16,11 +16,10 @@
     let selectedTunningKey: TunningOptionsKey = $state("guitar-6");
     let selectedTunning: NoteSymbol[] | undefined = $state(tunningOptions.get(selectedTunningKey));
     let selectedSingleNote: NoteSymbol = $state("E");
-    let numberOfFrets: string = $state("5");
+    let numberOfFrets: string = $state(`${options.fretsCount}`);
 
 
     const setTunning = (noteSymbols: NoteSymbol[]) => {
-        //@ts-ignore
         options.setTunning(noteSymbols, parseInt(numberOfFrets));
     }
 
