@@ -4,6 +4,7 @@
     import { getColor } from "../constants/noteColorMapper";
     import { Fretboard } from "../scripts/fretboard.svelte";
     import GuessButtons from "./GuessButtons.svelte";
+    import { fretsMarker } from "../constants/fretboard";
 
     let scrollContainer: HTMLDivElement;
 
@@ -16,19 +17,17 @@
 
     let fretsCount = $state(options.fretsCount);
     let tunning = $state(options.tunning);
-
-    const scaleLength: number = 648;
-    const fretsMarker: number[] = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
-    let fretsSlotWidth: number[] = $state(fretboard.calcFretsSlotWidth(scaleLength, fretsCount));
+    let fretsSlotWidth: number[] = $state(fretboard.calcFretsSlotWidth(fretsCount));
 
     $effect(() => { 
         tunning = options.tunning
         fretsCount = options.fretsCount
-        fretsSlotWidth = fretboard.calcFretsSlotWidth(scaleLength, fretsCount);
+        fretsSlotWidth = fretboard.calcFretsSlotWidth(fretsCount);
     })
 
     // To avoid multpiple $effect trigger while changing options
     let lastOptionsJSON: string = $state("");
+
     $effect(() => {
         // To avoid multpiple $effect trigger while changing options
         const json = JSON.stringify(options);
@@ -42,43 +41,46 @@
 </script>
 
 
-<div class="fretboard">
-    <!-- Guitar tuning -->
-    <div class="fret-column">
-        {#each tunning as note}
-            <div class="sound-symbol" 
-            style="color: {getColor(note)};">{note}</div>
-        {/each}
-        
-        <div class="sound-symbol" style="flex-shrink: 0;">
-            <span>0</span>
-        </div>
-    </div>
-    
-    <!-- Fretboard -->
-    <div class="frets-container" bind:this={scrollContainer} id="fretboard-scroll-container">
-        <div class="frets" style="width: {options.responsive ? "350%" : "100%"}">
-            {#each fretboard.getFretboard() as fretNotes, i}
-                <div class="fret-row">
-                    {#each fretNotes as _, j}
-                        <FretSlot
-                            fretboardNotes={fretboard.getFretboard()}
-                            position={{y: i, x: j}}
-                            width={fretsSlotWidth[j]}
-                            fretDistance={i}
-                        />
-                    {/each}
-                </div>
+<div class="fretboard-container">
+    <div class="fretboard" style="max-width: {options.responsive ? "90%" : "1250px"};">
+        <!-- Guitar tuning -->
+        <div class="fret-column">
+            {#each tunning as note}
+                <div class="sound-symbol" 
+                style="color: {getColor(note)};">{note}</div>
             {/each}
-         
-            <div class="fret-numeration-container">
-                {#each {length: fretsCount} as _, i}
-                    <div
-                        class="fret-numeration"
-                        style="width: {fretsSlotWidth[i]}%;">
-                        <span>{ fretsMarker.includes(i+1) ? (i+1) : ' ' }</span>
+            
+            <div class="sound-symbol" style="flex-shrink: 0;">
+                <span class="fret-number"> &nbsp; </span>
+            </div>
+        </div>
+        
+        <!-- Fretboard -->
+        <div class="frets-container" bind:this={scrollContainer} id="fretboard-scroll-container">
+            <div class="frets" style="">
+                {#each fretboard.getFretboard() as fretNotes, i}
+                    <div class="fret-row">
+                        {#each fretNotes as _, j}
+                            <FretSlot
+                                fretboardNotes={fretboard.getFretboard()}
+                                position={{y: i, x: j}}
+                                width={fretsSlotWidth[j]}
+                                fretDistance={i}
+                            />
+                        {/each}
                     </div>
                 {/each}
+            
+                <div class="fret-numeration-container">
+                    {#each {length: fretsCount} as _, i}
+                        <div
+                            class="fret-numeration"
+                            style="width: {fretsSlotWidth[i] / options.fretSlotDividerValue}em;">
+                            <span class="fret-number">{ fretsMarker.includes(i+1) ? (i+1) : ' ' }</span>
+                        </div>
+                    {/each}
+                </div>
+
             </div>
         </div>
     </div>
@@ -86,12 +88,17 @@
 
 <GuessButtons fretboard={fretboard}/>
 
-
 <style lang="scss">
     $default-fret-width: 1.75em;
 
+    .fretboard-container {
+        display: flex;
+        justify-content: center;
+    }
     .fretboard {
-        width: 100%;
+        width: auto;
+        max-width: 90%;
+
         display: flex;
         flex-direction: row;
         background: linear-gradient(135deg, #6e4b3a 25%, #7f5a3c 50%, #6e4b3a 75%);
@@ -109,7 +116,7 @@
     .frets-container {
         width: 100%;
         overflow: scroll;
-        scrollbar-width: none; /* ukrywa scrollbar */
+        scrollbar-width: none; /* hides scrollbar */
         scrollbar-color: transparent transparent;
         scroll-behavior: smooth;
     }
@@ -118,7 +125,6 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        width: 100%;
         height: 100%;
     }
 
@@ -126,7 +132,7 @@
         display: flex;
         flex: 1;
         flex-direction: row;
-        width: 100%;
+        width: fit-content;
     }
 
     .sound-symbol {
@@ -136,6 +142,7 @@
     }
 
     .fret-numeration-container {
+        width: fit-content;
         display: flex;
         flex: 1;
         flex-direction: row;
@@ -145,5 +152,13 @@
     .fret-numeration {
         width: $default-fret-width;
         text-align: center;
+    }
+
+    .fret-number {
+        width: 100%;
+        height: 100%;
+        display: block;
+        text-align: center;
+        font-size: .9em;
     }
 </style>

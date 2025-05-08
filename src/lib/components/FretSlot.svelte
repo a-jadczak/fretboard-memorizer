@@ -1,4 +1,5 @@
 <script lang="ts">
+  import options from "../scripts/options.svelte";
   import type FretNote from "../types/FretNote";
 
     const { width, fretboardNotes, position } = $props<{ width: number; fretDistance: number; fretboardNotes: FretNote[][], position: {x:number, y:number} }>();
@@ -13,12 +14,9 @@
 
 <div 
     class="fret-slot" 
-    style="width: {width}%;">
+    style="width: {width / options.fretSlotDividerValue}em;">
     <div class="fret"></div>
-    <div
-        class:stringActive
-        class="string" 
-    >
+    <div class:stringActive class="string">
 
     </div>
 </div>

@@ -1,73 +1,58 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    import { noteSymbols } from "../scripts/fretboard.svelte";
-    import options from "../scripts/options.svelte";
-    import type { NoteSymbol } from "../types/NoteSymbol";
-    import type { TunningOptionsKey } from "../types/TunningOptionsKey";
-    
-    const SAVE_KEY: string = "FRETBOARD-MEMORIZER-OPTIONS";
+  import { onMount } from "svelte";
+  import { noteSymbols } from "../scripts/fretboard.svelte";
+  import options from "../scripts/options.svelte";
+  import type { NoteSymbol } from "../types/NoteSymbol";
+  import type { TunningOptionsKey } from "../types/TunningOptionsKey";
+  import { readOptions, saveOptions } from "../scripts/localstorage";
+  import type OptionsToSave from "../types/OptionsToSave";
+ 
+  let tunningOptionsMap: Map<string, NoteSymbol[]> = $state(new Map([
+    ["string-1", ["E"]],
+    ["bass-4", ["G", "D", "A", "E"]],
+    ["bass-5", ["G", "D", "A", "E", "B"]],
+    ["guitar-6", ["E", "B", "G", "D", "A", "E"]],
+    ["guitar-7", ["E", "B", "G", "D", "A", "E", "B"]],
+    ["guitar-8", ["E", "B", "G", "D", "A", "E", "B", "F#"]]
+  ]));
 
-    let tunningOptionsMap: Map<string, NoteSymbol[]> = $state(new Map([
-      ["string-1", ["E"]],
-      ["bass-4", ["G", "D", "A", "E"]],
-      ["bass-5", ["G", "D", "A", "E", "B"]],
-      ["guitar-6", ["E", "B", "G", "D", "A", "E"]],
-      ["guitar-7", ["E", "B", "G", "D", "A", "E", "B"]],
-      ["guitar-8", ["E", "B", "G", "D", "A", "E", "B", "F#"]]
-    ]));
+  let selectedTunningKey: TunningOptionsKey = $state("guitar-6");
+  let selectedTunning: NoteSymbol[] | undefined = $state(tunningOptionsMap.get(selectedTunningKey));
+  let selectedSingleNote: NoteSymbol = $state("E");
+  let numberOfFrets: string = $state(`${options.fretsCount}`);
 
-    let selectedTunningKey: TunningOptionsKey = $state("guitar-6");
-    let selectedTunning: NoteSymbol[] | undefined = $state(tunningOptionsMap.get(selectedTunningKey));
-    let selectedSingleNote: NoteSymbol = $state("E");
-    let numberOfFrets: string = $state(`${options.fretsCount}`);
+  const setTunningAndSave = (noteSymbols: NoteSymbol[]) => {
+    selectedTunning = noteSymbols;
+    options.setTunning(noteSymbols, parseInt(numberOfFrets));
 
-    const setTunningAndSave = (noteSymbols: NoteSymbol[]) => {
-      selectedTunning = noteSymbols;
-      options.setTunning(noteSymbols, parseInt(numberOfFrets));
-      saveToLS();
-    }
+    saveOptions({ selectedTunningKey, numberOfFrets, selectedSingleNote });
+  }
 
-    // LS - Local storage
+  const setSavedOptions = (savedOptions: OptionsToSave) => {
+    const { selectedTunningKey: newTunningKey, numberOfFrets: newNumberOfFrets, selectedSingleNote: newSingleNote } = savedOptions;
+    const newSelectedTunning: NoteSymbol[] = tunningOptionsMap.get(newTunningKey) ?? [];
+    const tunning: NoteSymbol[] = newTunningKey === "string-1" ? [newSingleNote] : newSelectedTunning;
 
-    const saveToLS = () => {
-      const object = { selectedTunningKey, numberOfFrets, selectedSingleNote };
+    selectedTunningKey = newTunningKey;
+    numberOfFrets = newNumberOfFrets;
+    selectedSingleNote = newSingleNote;
+    selectedTunning = newSelectedTunning;
 
-      localStorage.setItem(SAVE_KEY, JSON.stringify(object));
-    }
-
-    const readFromLS = () => {
-      const savedObject = localStorage.getItem(SAVE_KEY);
-
-      if (!savedObject) {
-        return;
-      }
-
-      try {
-        const savedParsedObject = JSON.parse(savedObject);
-        const { selectedTunningKey: newTunningKey, numberOfFrets: newNumberOfFrets, selectedSingleNote: newSingleNote } = savedParsedObject;
-
-        const newSelectedTunning: NoteSymbol[] = tunningOptionsMap.get(newTunningKey) ?? [];
-
-        selectedTunningKey = newTunningKey;
-        selectedTunning = newSelectedTunning
-        numberOfFrets = newNumberOfFrets;
-        selectedSingleNote = newSingleNote;
-
-        let tunning: NoteSymbol[] = newTunningKey === "string-1" ? [newSingleNote]: newSelectedTunning;
-
-        tunningOptionsMap.set("string-1", [newSingleNote]);
+    // Update the selected tuning in the map
+    tunningOptionsMap.set("string-1", [newSingleNote]);
         
-        options.setTunning(tunning, parseInt(newNumberOfFrets));
-      }
-      catch (error) {
-        console.error('Failed to read tuning from localStorage', error);
-      }
-      
-    }
+    // Set the tuning in the options
+    options.setTunning(tunning, parseInt(newNumberOfFrets));
+  }
 
-    onMount(() => {
-      readFromLS();
-    })
+  onMount(() => {
+    const savedOptions: OptionsToSave | null = readOptions();
+
+    if (!savedOptions)
+      return;
+
+    setSavedOptions(savedOptions);
+  })
 </script>
 
 

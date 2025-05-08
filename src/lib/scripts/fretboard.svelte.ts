@@ -1,7 +1,9 @@
+import { scaleLength } from "../constants/fretboard";
 import type FretNote from "../types/FretNote";
 import type { NoteSymbol } from "../types/NoteSymbol";
 import type Options from "../types/Options";
 import type Position from "../types/Position";
+import options from "./options.svelte";
 
 export const noteSymbols: NoteSymbol[] = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
@@ -16,11 +18,16 @@ export class Fretboard {
         this.onResize();
         
         this.onRandom = onRandomCB;
-        window.addEventListener("resize", this.onResize);
+        window.addEventListener("resize", this.onResize);        
     }
 
     onResize = () => {
-        const divider: number = 7.5;
+        this.calcScrollMoveOffset();
+    }
+
+    
+    calcScrollMoveOffset = (): void => { 
+        const divider: number = 12;
         this.#scrollMoveOffset = window.innerWidth / divider;
     }
 
@@ -37,7 +44,7 @@ export class Fretboard {
         return this.#fretboardNotes;
     }
 
-    calcFretsSlotWidth = (scaleLength: number, fretsCount: number): number[] => 
+    calcFretsSlotWidth = (fretsCount: number): number[] => 
     {
         const arr: number[] = [];
     
@@ -95,6 +102,8 @@ export class Fretboard {
         this.#randomNotePos = {x: x, y: y}
 
         this.#fretboardNotes[y][x].active = true;
+
+        console.log(this.#fretboardNotes[y][x].note);
         
         setTimeout(() => {this.onRandom(x * this.#scrollMoveOffset)}, 0); // to force reactivity
         

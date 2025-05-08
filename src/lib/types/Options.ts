@@ -5,5 +5,6 @@ export default interface Options {
     fretsCount: number,
     stringsCount: number,
     responsive: boolean,
+    fretSlotDividerValue: number,
     setTunning: (newTunning: NoteSymbol[], numberOfFrets: number) => void
 }
