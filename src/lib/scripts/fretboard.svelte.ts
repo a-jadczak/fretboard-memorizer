@@ -9,17 +9,28 @@ export class Fretboard {
     #fretboardNotes: FretNote[][]  = $state<FretNote[][]>([]);
     #randomNotePos: Position = $state({x: -1, y: -1})
 
-    constructor(options: Options) {
-        this.setFretboard(options);
+    #scrollMoveOffset = 50;
+    onRandom: ((value: number) => void)
+
+    constructor(onRandomCB: ((value: number) => void)) {
+        this.onResize();
+        
+        this.onRandom = onRandomCB;
+        window.addEventListener("resize", this.onResize);
+    }
+
+    onResize = () => {
+        const divider: number = 7.5;
+        this.#scrollMoveOffset = window.innerWidth / divider;
     }
 
     setFretboard(options: Options) {
-        //$inspect("Przed:", fretboardNotes)
-
         this.#fretboardNotes = this.initializeFretboard(options);
-        //$inspect("Po:", fretboardNotes)
-
         this.pickRandomNote(options);
+    }
+
+    getRandomNotePos() {
+        return this.#randomNotePos;
     }
 
     getFretboard() {
@@ -45,7 +56,6 @@ export class Fretboard {
         const fretsCount = options.fretsCount;
         const stringsCount = options.stringsCount;
 
-        console.log("W funkcji opcje", tunning);
         const arr: FretNote[][] = [];
     
         for (let i = 0; i < stringsCount; i++) {
@@ -61,7 +71,6 @@ export class Fretboard {
             }
             
         }
-        console.log("nowa:", arr);
         
         return arr;
     }
@@ -86,7 +95,9 @@ export class Fretboard {
         this.#randomNotePos = {x: x, y: y}
 
         this.#fretboardNotes[y][x].active = true;
-        console.log(this.#fretboardNotes[y][x].note)
+        
+        setTimeout(() => {this.onRandom(x * this.#scrollMoveOffset)}, 0); // to force reactivity
+        
     }
     checkNote = (note: NoteSymbol, options: Options) => {
         const {x, y} = this.#randomNotePos;
@@ -94,11 +105,8 @@ export class Fretboard {
         const correctNote = this.#fretboardNotes[y][x]
 
         if (correctNote.note === note) {
-            console.log("yes")
             this.#fretboardNotes[y][x].active = false;
             this.pickRandomNote(options);
-        } else {
-            console.log("no")
         }
     }
 }

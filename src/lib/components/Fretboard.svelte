@@ -1,24 +1,43 @@
 <script lang="ts">
     import FretSlot from "./FretSlot.svelte";
     import options from "../scripts/options.svelte";
-  import { getColor } from "../constants/noteColorMapper";
+    import { getColor } from "../constants/noteColorMapper";
+    import { Fretboard } from "../scripts/fretboard.svelte";
+    import GuessButtons from "./GuessButtons.svelte";
 
-    let props = $props();
+    let scrollContainer: HTMLDivElement;
+
+    // Callback function to scroll the fretboard
+    const scrollTo = (value: number): void => { 
+        scrollContainer.scrollLeft = value;
+    }
+
+    const fretboard = new Fretboard(scrollTo);
 
     let fretsCount = $state(options.fretsCount);
     let tunning = $state(options.tunning);
 
     const scaleLength: number = 648;
     const fretsMarker: number[] = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
-    let fretsSlotWidth: number[] = $state(props.fretboard.calcFretsSlotWidth(scaleLength, fretsCount));
+    let fretsSlotWidth: number[] = $state(fretboard.calcFretsSlotWidth(scaleLength, fretsCount));
 
     $effect(() => { 
         tunning = options.tunning
         fretsCount = options.fretsCount
-        fretsSlotWidth = props.fretboard.calcFretsSlotWidth(scaleLength, fretsCount);
+        fretsSlotWidth = fretboard.calcFretsSlotWidth(scaleLength, fretsCount);
     })
 
-    
+    // To avoid multpiple $effect trigger while changing options
+    let lastOptionsJSON: string = $state("");
+    $effect(() => {
+        // To avoid multpiple $effect trigger while changing options
+        const json = JSON.stringify(options);
+
+        if (json !== lastOptionsJSON) {
+            lastOptionsJSON = json;
+            fretboard.setFretboard(options);
+        }
+    })
 
 </script>
 
@@ -37,13 +56,13 @@
     </div>
     
     <!-- Fretboard -->
-    <div class="frets-container">
-        <div class="frets">
-            {#each props.fretboard.getFretboard() as fretNotes, i}
+    <div class="frets-container" bind:this={scrollContainer} id="fretboard-scroll-container">
+        <div class="frets" style="width: {options.responsive ? "350%" : "100%"}">
+            {#each fretboard.getFretboard() as fretNotes, i}
                 <div class="fret-row">
                     {#each fretNotes as _, j}
                         <FretSlot
-                            fretboardNotes={props.fretboard.getFretboard()}
+                            fretboardNotes={fretboard.getFretboard()}
                             position={{y: i, x: j}}
                             width={fretsSlotWidth[j]}
                             fretDistance={i}
@@ -63,22 +82,10 @@
             </div>
         </div>
     </div>
-
 </div>
 
-<!-- Numeration -->
-<!-- <div class="fret-numeration-container">
-    <div class="fret-numeration" style="flex-shrink: 0;">
-        <span>0</span>
-    </div>
-    {#each {length: fretsCount} as _, i}
-        <div
-            class="fret-numeration"
-            style="width: {fretsSlotWidth[i]}%;">
-            <span>{ fretsMarker.includes(i+1) ? (i+1) : ' ' }</span>
-        </div>
-    {/each}
-</div> -->
+<GuessButtons fretboard={fretboard}/>
+
 
 <style lang="scss">
     $default-fret-width: 1.75em;
@@ -89,6 +96,8 @@
         flex-direction: row;
         background: linear-gradient(135deg, #6e4b3a 25%, #7f5a3c 50%, #6e4b3a 75%);
         background-size: 400% 400%;
+
+        font-size: 1.75em;
     }
 
     .fret-column {
@@ -102,18 +111,14 @@
         overflow: scroll;
         scrollbar-width: none; /* ukrywa scrollbar */
         scrollbar-color: transparent transparent;
-    }
-
-    .frets-container::-webkit-scrollbar {
-        height: 0px;
-        background: transparent;
+        scroll-behavior: smooth;
     }
 
     .frets {
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        width: 100%; // TOEDIT
+        width: 100%;
         height: 100%;
     }
 
@@ -128,8 +133,6 @@
         display: grid;
         place-items: center;
         width: $default-fret-width;
-
-        // border: .125em solid black;
     }
 
     .fret-numeration-container {

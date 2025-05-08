@@ -5,11 +5,8 @@
 
     let stringActive: boolean = $state(false);
 
-    const guitarStringThickness: number = 0.07;
-
     $effect(() => {
         stringActive = fretboardNotes[position.y][position.x].active;
-        console.log(position)
     })
 
 </script>

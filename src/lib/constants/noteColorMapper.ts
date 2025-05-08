@@ -1,4 +1,3 @@
-import type { NoteColor } from "../types/NoteColor"
 import type { NoteSymbol } from "../types/NoteSymbol"
 
 export const noteColorMapper: Map<NoteSymbol, string> = new Map([
@@ -10,8 +9,8 @@ export const noteColorMapper: Map<NoteSymbol, string> = new Map([
     ["F", "#00FF00"],
     ["F#", "#00FFFF"],
     ["G", "#007FFF"],
-    ["G#", "#0000FF"],
-    ["A", "#7F00FF"],
+    ["G#", "#562dfa"],
+    ["A", "#9408ff"],
     ["A#", "#BF00FF"],
     ["B", "#FF00BF"]
 ]);
