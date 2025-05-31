@@ -12,6 +12,7 @@ export class Fretboard {
     #randomNotePos: Position = $state({x: -1, y: -1})
 
     #scrollMoveOffset = 50;
+    #lastRandomNote: Position = {x: -1, y: -1};
     onRandom: ((value: number) => void)
 
     constructor(onRandomCB: ((value: number) => void)) {
@@ -96,10 +97,15 @@ export class Fretboard {
     getRandomFretPosition = (options: Options): Position => {
         const { fretsCount, stringsCount } = options;
         
-        const rndString = Math.floor(Math.random() * stringsCount);
-        const rndFret = Math.floor(Math.random() * fretsCount);
+        let rndString: number, rndFret: number;
+        do {
+            rndString = Math.floor(Math.random() * stringsCount);
+            rndFret = Math.floor(Math.random() * fretsCount);
+        }
+        while (this.#lastRandomNote.x === rndFret && this.#lastRandomNote.y === rndString);
         
-        return {y: rndString, x: rndFret};
+        this.#lastRandomNote = {x: rndFret, y: rndString};
+        return { x: rndFret, y: rndString };
     }
     pickRandomNote = (options: Options) => {
         const {x, y} = this.getRandomFretPosition(options);
