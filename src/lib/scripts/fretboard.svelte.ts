@@ -27,8 +27,12 @@ export class Fretboard {
 
     
     calcScrollMoveOffset = (): void => { 
-        const divider: number = 12;
-        this.#scrollMoveOffset = window.innerWidth / divider;
+        const width = window.innerWidth;
+        const calculation = 100 / Math.pow(width, .95);
+        const multiplier = calculation > 0.17 ? 0.17 : calculation;
+
+        this.#scrollMoveOffset = width * multiplier;
+        console.log(multiplier);
     }
 
     setFretboard(options: Options) {

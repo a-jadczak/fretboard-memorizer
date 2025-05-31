@@ -15,8 +15,8 @@ let options: Options = $state({
         this.stringsCount = newTunning.length;
         this.fretsCount = numberOfFrets;
         //@ts-ignore
-        this.responsive = numberOfFrets > 12 || (window.innerWidth < 768 && numberOfFrets > 5);
-        this.fretSlotDividerValue = window.innerWidth < 768 ? 10 : 5;
+        this.responsive = true;
+        this.fretSlotDividerValue = window.innerWidth < 568 ? 10 : 5;
     },
     
 }); 
