@@ -46,6 +46,8 @@
             #666666 .3em);
         border-top: .01em solid black;
         border-bottom: .01em solid black;
+
+        box-shadow: 0px -4px .2em .0025em rgba(0, 0, 0, 0.35);
     }
 
     .stringActive {
