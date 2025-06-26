@@ -13,7 +13,7 @@
         scrollContainer.scrollLeft = value;
     }
 
-    const fretboard = new Fretboard(scrollTo);
+    const fretboard = new Fretboard(scrollTo, ()=> options.updateFretboardResponsiveness());
 
     let fretsCount = $state(options.fretsCount);
     let tunning = $state(options.tunning);
@@ -36,13 +36,15 @@
             lastOptionsJSON = json;
             fretboard.setFretboard(options);
         }
+
+        options.updateFretboardResponsiveness();
     })
 
 </script>
 
 
 <div class="fretboard-container">
-    <div class="fretboard" style="max-width: {options.responsive ? "90%" : "1250px"};">
+    <div class="fretboard" style="max-width: 90%;">
         <!-- Guitar tuning -->
         <div class="fret-column">
             {#each tunning as note}

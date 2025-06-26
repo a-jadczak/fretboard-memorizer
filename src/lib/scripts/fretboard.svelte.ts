@@ -14,15 +14,16 @@ export class Fretboard {
     #lastRandomNote: Position = {x: -1, y: -1};
     onRandom: ((value: number) => void)
 
-    constructor(onRandomCB: ((value: number) => void)) {
-        this.onResize();
+    constructor(onRandomCB: ((value: number) => void), onResizeCB: () => void) {
+        this.onResize(onResizeCB);
         
         this.onRandom = onRandomCB;
-        window.addEventListener("resize", this.onResize);        
+        window.addEventListener("resize", () => this.onResize(onResizeCB));        
     }
 
-    onResize = () => {
+    onResize = (callback: () => void) => {
         this.calcScrollMoveOffset();
+        callback();
     }
     
     calcScrollMoveOffset = (): void => { 
@@ -36,7 +37,6 @@ export class Fretboard {
 
     setFretboard(options: Options) {
         this.#fretboardNotes = this.initializeFretboard(options);
-        options.updateFretSlotWidth();
         this.pickRandomNote(options);
     }
 
