@@ -1,3 +1,4 @@
+import { onMount } from "svelte";
 import type { NoteSymbol } from "../types/NoteSymbol";
 import type Options from "../types/Options";
 
@@ -18,7 +19,9 @@ let options: Options = $state({
         this.responsive = true;
         this.fretSlotDividerValue = window.innerWidth < 568 ? 10 : 5;
     },
-    
+    updateFretSlotWidth() {
+        this.fretSlotDividerValue = window.innerWidth < 568 ? 10 : 5;
+    }
 }); 
 
 

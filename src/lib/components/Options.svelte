@@ -43,6 +43,7 @@
         
     // Set the tuning in the options
     options.setTunning(tunning, parseInt(newNumberOfFrets));
+
   }
 
   onMount(() => {
@@ -53,6 +54,7 @@
 
     setSavedOptions(savedOptions);
   })
+
 </script>
 
 

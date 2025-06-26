@@ -3,8 +3,6 @@
   import "./styles/style.scss"
   import 'bulma/css/bulma.min.css';
   import Fretboard from "./lib/components/Fretboard.svelte";
-    
-
 </script>
 
 <div class="wrapper">

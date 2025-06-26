@@ -3,7 +3,6 @@ import type FretNote from "../types/FretNote";
 import type { NoteSymbol } from "../types/NoteSymbol";
 import type Options from "../types/Options";
 import type Position from "../types/Position";
-import options from "./options.svelte";
 
 export const noteSymbols: NoteSymbol[] = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
@@ -25,7 +24,6 @@ export class Fretboard {
     onResize = () => {
         this.calcScrollMoveOffset();
     }
-
     
     calcScrollMoveOffset = (): void => { 
         const width = window.innerWidth;
@@ -38,6 +36,7 @@ export class Fretboard {
 
     setFretboard(options: Options) {
         this.#fretboardNotes = this.initializeFretboard(options);
+        options.updateFretSlotWidth();
         this.pickRandomNote(options);
     }
 
