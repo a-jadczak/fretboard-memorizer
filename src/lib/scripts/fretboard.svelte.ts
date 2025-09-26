@@ -5,6 +5,8 @@ import type Options from "../types/Options";
 import type Position from "../types/Position";
 
 export const noteSymbols: NoteSymbol[] = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+export const noteSymbolsWithFlats: string[] = ["C","C#/D♭","D","D#/E♭","E","F","F#/G♭","G","G#/A♭","A","A#/B♭","B"];
+
 
 export class Fretboard {
     #fretboardNotes: FretNote[][]  = $state<FretNote[][]>([]);
