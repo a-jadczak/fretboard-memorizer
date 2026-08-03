@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
 	import { NOTE_SYMBOLS } from '@/lib/scripts/fretboard.svelte'
+	import { readOptions, saveOptions } from '@/lib/scripts/local-storage'
 	import options from '@/lib/scripts/options.svelte'
 	import type { NoteSymbol } from '@/lib/types/note-symbol'
 	import type { TunningOptionsKey } from '@/lib/types/tuning-option-key'
-	import { readOptions, saveOptions } from '@/lib/scripts/local-storage'
 	import type OptionsToSave from '@/lib/types/options-to-save'
 
 	let tunningOptionsMap: Map<string, NoteSymbol[]> = $state(
@@ -64,7 +64,7 @@
 		<div class="control">
 			<div class="select is-primary">
 				<select
-					name="instrument"
+					id="instrument"
 					bind:value={selectedTunningKey}
 					onchange={() => {
 						const newTunning = tunningOptionsMap.get(selectedTunningKey) ?? []
@@ -88,7 +88,7 @@
 			<div class="control">
 				<div class="select is-primary">
 					<select
-						name="custom-single-note"
+						id="custom-single-note"
 						bind:value={selectedSingleNote}
 						onchange={() => {
 							tunningOptionsMap.set(selectedTunningKey, [selectedSingleNote])
@@ -109,7 +109,7 @@
 		<div class="control">
 			<div class="select is-primary">
 				<select
-					name="number-of-frets"
+					id="number-of-frets"
 					bind:value={numberOfFrets}
 					onchange={() => {
 						const newTunning = tunningOptionsMap.get(selectedTunningKey) ?? []
@@ -125,9 +125,3 @@
 		</div>
 	</div>
 </div>
-
-<style lang="scss">
-	.options-container {
-		margin-top: 0.2em;
-	}
-</style>

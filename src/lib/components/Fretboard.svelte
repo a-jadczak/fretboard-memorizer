@@ -41,7 +41,7 @@
 	})
 </script>
 
-<div class="fretboard-container">
+<div class="fretboard-container" aria-hidden="true">
 	<div class="fretboard" style="max-width: 90%;">
 		<!-- Guitar tuning -->
 		<div class="fret-column">

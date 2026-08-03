@@ -4,11 +4,13 @@
 </script>
 
 <div class="wrapper">
-	<Options />
+	<header>
+		<Options />
+	</header>
 
-	<div class="container-fretboard">
+	<main class="container-fretboard">
 		<Fretboard />
-	</div>
+	</main>
 </div>
 
 <style>
@@ -18,7 +20,11 @@
 		min-height: 100vh;
 	}
 
-	.container-fretboard {
+	header {
+		margin: 0.5em;
+	}
+
+	main {
 		width: 100%;
 		flex: 1;
 		display: flex;
