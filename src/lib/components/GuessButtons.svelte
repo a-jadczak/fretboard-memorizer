@@ -1,6 +1,10 @@
 <script lang="ts">
-	import { getColor } from '../constants/noteColorMapper'
-	import { type Fretboard, noteSymbols, noteSymbolsWithFlats } from '../scripts/fretboard.svelte'
+	import { getNoteColor } from '../constants/noteColorMapper'
+	import {
+		type Fretboard,
+		NOTE_SYMBOLS,
+		NOTE_SYMBOLS_WITH_FLATS,
+	} from '../scripts/fretboard.svelte'
 	import options from '../scripts/options.svelte'
 
 	let props: { fretboard: Fretboard } = $props()
@@ -8,19 +12,19 @@
 
 <div class="container-grid-buttons">
 	<div class="grid-buttons">
-		{#each noteSymbols as note, i}
+		{#each NOTE_SYMBOLS as note, i (note)}
 			<button
 				style="
-            color: {getColor(note)};
-            boxShadow: 0 .01em .1em {getColor(note)};
-            border: .1em solid {getColor(note)};
+            color: {getNoteColor(note)};
+            boxShadow: 0 .01em .1em {getNoteColor(note)};
+            border: .1em solid {getNoteColor(note)};
           "
 				class="button is-inline-block m-1 is-primary is-inverted guess-button"
 				onclick={() => {
 					props.fretboard.checkNote(note, options)
 				}}
 			>
-				{noteSymbolsWithFlats[i]}
+				{NOTE_SYMBOLS_WITH_FLATS[i]}
 			</button>
 		{/each}
 	</div>

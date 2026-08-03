@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { fretsMarker } from '../constants/fretboard'
-	import { getColor } from '../constants/noteColorMapper'
+	import { FRETS_MARKER } from '../constants/fretboard'
+	import { getNoteColor } from '../constants/noteColorMapper'
 	import { Fretboard } from '../scripts/fretboard.svelte'
 	import options from '../scripts/options.svelte'
 	import FretSlot from './FretSlot.svelte'
@@ -45,8 +45,8 @@
 	<div class="fretboard" style="max-width: 90%;">
 		<!-- Guitar tuning -->
 		<div class="fret-column">
-			{#each tunning as note}
-				<div class="sound-symbol" style="color: {getColor(note)};">{note}</div>
+			{#each tunning as note, i (i)}
+				<div class="sound-symbol" style="color: {getNoteColor(note)};">{note}</div>
 			{/each}
 
 			<div class="sound-symbol" style="flex-shrink: 0;">
@@ -57,26 +57,18 @@
 		<!-- Fretboard -->
 		<div class="frets-container" bind:this={scrollContainer} id="fretboard-scroll-container">
 			<div class="frets" style="">
-				{#each fretboard.getFretboard() as fretNotes, i}
+				{#each fretboard.getFretboard() as fretNotes (fretNotes)}
 					<div class="fret-row">
-						{#each fretNotes as _, j}
-							<FretSlot
-								fretboardNotes={fretboard.getFretboard()}
-								position={{ y: i, x: j }}
-								width={fretsSlotWidth[j]}
-								fretDistance={i}
-							/>
+						{#each fretNotes as fretNote, j (j)}
+							<FretSlot active={fretNote.active} width={fretsSlotWidth[j]} />
 						{/each}
 					</div>
 				{/each}
 
 				<div class="fret-numeration-container">
-					{#each { length: fretsCount } as _, i}
-						<div
-							class="fret-numeration"
-							style="width: {fretsSlotWidth[i] / options.fretSlotDividerValue}em;"
-						>
-							<span class="fret-number">{fretsMarker.includes(i + 1) ? i + 1 : ' '}</span>
+					{#each fretsSlotWidth as width, i (i)}
+						<div class="fret-numeration" style="width: {width / options.fretSlotDividerValue}em;">
+							<span class="fret-number">{FRETS_MARKER.includes(i + 1) ? i + 1 : ' '}</span>
 						</div>
 					{/each}
 				</div>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { noteSymbols } from '../scripts/fretboard.svelte'
+	import { NOTE_SYMBOLS } from '../scripts/fretboard.svelte'
 	import options from '../scripts/options.svelte'
 	import type { NoteSymbol } from '../types/NoteSymbol'
 	import type { TunningOptionsKey } from '../types/TunningOptionsKey'
@@ -19,12 +19,10 @@
 	)
 
 	let selectedTunningKey: TunningOptionsKey = $state('guitar-6')
-	let selectedTunning: NoteSymbol[] | undefined = $state(tunningOptionsMap.get(selectedTunningKey))
 	let selectedSingleNote: NoteSymbol = $state('E')
 	let numberOfFrets: string = $state(`${options.fretsCount}`)
 
 	const setTunningAndSave = (noteSymbols: NoteSymbol[]) => {
-		selectedTunning = noteSymbols
 		options.setTunning(noteSymbols, parseInt(numberOfFrets))
 
 		saveOptions({ selectedTunningKey, numberOfFrets, selectedSingleNote })
@@ -43,7 +41,6 @@
 		selectedTunningKey = newTunningKey
 		numberOfFrets = newNumberOfFrets
 		selectedSingleNote = newSingleNote
-		selectedTunning = newSelectedTunning
 
 		// Update the selected tuning in the map
 		tunningOptionsMap.set('string-1', [newSingleNote])
@@ -98,7 +95,7 @@
 							setTunningAndSave([selectedSingleNote])
 						}}
 					>
-						{#each noteSymbols as note}
+						{#each NOTE_SYMBOLS as note (note)}
 							<option value={note}>{note}</option>
 						{/each}
 					</select>

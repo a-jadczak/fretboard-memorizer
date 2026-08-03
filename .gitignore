@@ -1,3 +1,7 @@
+# Codex
+.agents
+.codex
+
 # Logs
 logs
 *.log

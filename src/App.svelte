@@ -1,7 +1,5 @@
 <script lang="ts">
 	import Options from './lib/components/Options.svelte'
-	import './styles/style.scss'
-	import 'bulma/css/bulma.min.css'
 	import Fretboard from './lib/components/Fretboard.svelte'
 </script>
 
@@ -26,10 +24,5 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-	}
-
-	.fretboard {
-		height: 100%;
-		width: clamp(300px, 100vw, 1200px);
 	}
 </style>

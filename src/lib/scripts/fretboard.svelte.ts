@@ -1,10 +1,10 @@
-import { scaleLength } from '../constants/fretboard'
+import { SCALE_LENGTH } from '../constants/fretboard'
 import type FretNote from '../types/FretNote'
 import type { NoteSymbol } from '../types/NoteSymbol'
 import type Options from '../types/Options'
 import type Position from '../types/Position'
 
-export const noteSymbols: NoteSymbol[] = [
+export const NOTE_SYMBOLS: NoteSymbol[] = [
 	'C',
 	'C#',
 	'D',
@@ -18,7 +18,7 @@ export const noteSymbols: NoteSymbol[] = [
 	'A#',
 	'B',
 ]
-export const noteSymbolsWithFlats: string[] = [
+export const NOTE_SYMBOLS_WITH_FLATS: string[] = [
 	'C',
 	'C#/D♭',
 	'D',
@@ -79,8 +79,8 @@ export class Fretboard {
 		const arr: number[] = []
 
 		for (let i = 0; i < fretsCount; i++) {
-			const Ln = scaleLength * Math.pow(0.5, i / 12)
-			const Ln_next = scaleLength * Math.pow(0.5, (i + 1) / 12)
+			const Ln = SCALE_LENGTH * Math.pow(0.5, i / 12)
+			const Ln_next = SCALE_LENGTH * Math.pow(0.5, (i + 1) / 12)
 			const width = Ln - Ln_next
 
 			arr.push(width)
@@ -111,11 +111,11 @@ export class Fretboard {
 		return arr
 	}
 	getFrettedNote = (stringNote: NoteSymbol, fretNumber: number): NoteSymbol => {
-		const noteIndex = noteSymbols.findIndex((e) => e === stringNote)
+		const noteIndex = NOTE_SYMBOLS.findIndex((e) => e === stringNote)
 
 		const targetIndex = (noteIndex + fretNumber) % 12
 
-		return noteSymbols[targetIndex]
+		return NOTE_SYMBOLS[targetIndex]
 	}
 	getRandomFretPosition = (options: Options): Position => {
 		const { fretsCount, stringsCount } = options
