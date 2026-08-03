@@ -79,9 +79,9 @@ export class Fretboard {
 		const arr: number[] = []
 
 		for (let i = 0; i < fretsCount; i++) {
-			let Ln = scaleLength * Math.pow(0.5, i / 12)
-			let Ln_next = scaleLength * Math.pow(0.5, (i + 1) / 12)
-			let width = Ln - Ln_next
+			const Ln = scaleLength * Math.pow(0.5, i / 12)
+			const Ln_next = scaleLength * Math.pow(0.5, (i + 1) / 12)
+			const width = Ln - Ln_next
 
 			arr.push(width)
 		}

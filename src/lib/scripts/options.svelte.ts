@@ -4,7 +4,7 @@ import type Options from '../types/Options'
 // Guitar tunning
 export const EStandard: NoteSymbol[] = ['E', 'B', 'G', 'D', 'A', 'E']
 
-let options: Options = $state({
+const options: Options = $state({
 	tunning: EStandard,
 	fretsCount: 5,
 	stringsCount: EStandard.length,
