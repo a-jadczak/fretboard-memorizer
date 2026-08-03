@@ -8,7 +8,6 @@
 
 	let scrollContainer: HTMLDivElement
 
-	// Callback function to scroll the fretboard
 	const scrollTo = (value: number): void => {
 		scrollContainer.scrollLeft = value
 	}
@@ -17,12 +16,11 @@
 
 	let fretsCount = $state(options.fretsCount)
 	let tunning = $state(options.tunning)
-	let fretsSlotWidth: number[] = $state(fretboard.calcFretsSlotWidth(fretsCount))
+	let fretsSlotWidth = $derived(fretboard.calcFretsSlotWidth(fretsCount))
 
 	$effect(() => {
 		tunning = options.tunning
 		fretsCount = options.fretsCount
-		fretsSlotWidth = fretboard.calcFretsSlotWidth(fretsCount)
 	})
 
 	// To avoid multpiple $effect trigger while changing options
