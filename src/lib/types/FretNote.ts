@@ -1,6 +1,6 @@
-import type { NoteSymbol } from "./NoteSymbol";
+import type { NoteSymbol } from './NoteSymbol'
 
 export default interface FretNote {
-    note: NoteSymbol,
-    active: boolean,
+	note: NoteSymbol
+	active: boolean
 }

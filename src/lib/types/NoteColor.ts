@@ -1,1 +1,2 @@
-export type NoteColor = 'tomato' | 'orange' | 'yellow' | 'limegreen' | 'royalblue' | 'rebeccapurple' | 'palevioletred'
+export type NoteColor =
+	'tomato' | 'orange' | 'yellow' | 'limegreen' | 'royalblue' | 'rebeccapurple' | 'palevioletred'

@@ -1,1 +1,2 @@
-export type TunningOptionsKey = "string-1" | "bass-4" | "bass-5" | "guitar-6" | "guitar-7" | "guitar-8";
+export type TunningOptionsKey =
+	'string-1' | 'bass-4' | 'bass-5' | 'guitar-6' | 'guitar-7' | 'guitar-8'
