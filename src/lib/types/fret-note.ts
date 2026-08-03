@@ -1,4 +1,4 @@
-import type { NoteSymbol } from './NoteSymbol'
+import type { NoteSymbol } from './note-symbol'
 
 export default interface FretNote {
 	note: NoteSymbol

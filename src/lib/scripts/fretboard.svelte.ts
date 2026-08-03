@@ -1,8 +1,8 @@
 import { SCALE_LENGTH } from '../constants/fretboard'
-import type FretNote from '../types/FretNote'
-import type { NoteSymbol } from '../types/NoteSymbol'
-import type Options from '../types/Options'
-import type Position from '../types/Position'
+import type FretNote from '../types/fret-note'
+import type { NoteSymbol } from '../types/note-symbol'
+import type Options from '../types/options'
+import type Position from '../types/position'
 
 export const NOTE_SYMBOLS: NoteSymbol[] = [
 	'C',

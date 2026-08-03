@@ -1,5 +1,5 @@
-import type { NoteSymbol } from '../types/NoteSymbol'
-import type Options from '../types/Options'
+import type { NoteSymbol } from '../types/note-symbol'
+import type Options from '../types/options'
 
 // Guitar tunning
 export const EStandard: NoteSymbol[] = ['E', 'B', 'G', 'D', 'A', 'E']

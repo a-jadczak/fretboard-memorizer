@@ -1,4 +1,4 @@
-import type { NoteSymbol } from '../types/NoteSymbol'
+import type { NoteSymbol } from '../types/note-symbol'
 
 const NOTE_COLORS = {
 	C: '#FF0000',

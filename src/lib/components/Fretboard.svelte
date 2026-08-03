@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { FRETS_MARKER } from '../constants/fretboard'
-	import { getNoteColor } from '../constants/noteColorMapper'
+	import { getNoteColor } from '../constants/note-color-mapper'
 	import { Fretboard } from '../scripts/fretboard.svelte'
 	import options from '../scripts/options.svelte'
 	import FretSlot from './FretSlot.svelte'

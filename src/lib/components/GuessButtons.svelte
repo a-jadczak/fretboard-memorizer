@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getNoteColor } from '../constants/noteColorMapper'
+	import { getNoteColor } from '../constants/note-color-mapper'
 	import {
 		type Fretboard,
 		NOTE_SYMBOLS,
