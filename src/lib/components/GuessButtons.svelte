@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { getNoteColor } from '../constants/note-color-mapper'
+	import { getNoteColor } from '@/lib/constants/note-color-mapper'
 	import {
 		type Fretboard,
 		NOTE_SYMBOLS,
 		NOTE_SYMBOLS_WITH_FLATS,
-	} from '../scripts/fretboard.svelte'
-	import options from '../scripts/options.svelte'
+	} from '@/lib/scripts/fretboard.svelte'
+	import options from '@/lib/scripts/options.svelte'
 
 	let props: { fretboard: Fretboard } = $props()
 </script>

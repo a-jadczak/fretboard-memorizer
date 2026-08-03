@@ -1,4 +1,4 @@
-import type OptionsToSave from '../types/options-to-save'
+import type OptionsToSave from '@/lib/types/options-to-save'
 
 const SAVE_KEY: string = 'FRETBOARD-MEMORIZER-OPTIONS'
 

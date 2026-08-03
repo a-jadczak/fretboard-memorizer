@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
-	import { NOTE_SYMBOLS } from '../scripts/fretboard.svelte'
-	import options from '../scripts/options.svelte'
-	import type { NoteSymbol } from '../types/note-symbol'
-	import type { TunningOptionsKey } from '../types/tuning-option-key'
-	import { readOptions, saveOptions } from '../scripts/local-storage'
-	import type OptionsToSave from '../types/options-to-save'
+	import { NOTE_SYMBOLS } from '@/lib/scripts/fretboard.svelte'
+	import options from '@/lib/scripts/options.svelte'
+	import type { NoteSymbol } from '@/lib/types/note-symbol'
+	import type { TunningOptionsKey } from '@/lib/types/tuning-option-key'
+	import { readOptions, saveOptions } from '@/lib/scripts/local-storage'
+	import type OptionsToSave from '@/lib/types/options-to-save'
 
 	let tunningOptionsMap: Map<string, NoteSymbol[]> = $state(
 		new Map([

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import options from '../scripts/options.svelte'
+	import options from '@/lib/scripts/options.svelte'
 
 	const { width, active } = $props<{
 		width: number

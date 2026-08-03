@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Options from './lib/components/Options.svelte'
-	import Fretboard from './lib/components/Fretboard.svelte'
+	import Options from '@/lib/components/Options.svelte'
+	import Fretboard from '@/lib/components/Fretboard.svelte'
 </script>
 
 <div class="wrapper">
