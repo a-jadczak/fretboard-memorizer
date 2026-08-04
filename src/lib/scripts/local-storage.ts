@@ -3,8 +3,7 @@ import type OptionsToSave from '@/lib/types/options-to-save'
 const SAVE_KEY: string = 'FRETBOARD-MEMORIZER-OPTIONS'
 
 export const saveOptions = (options: OptionsToSave) => {
-	const optionsToSave: OptionsToSave = options
-	localStorage.setItem(SAVE_KEY, JSON.stringify(optionsToSave))
+	localStorage.setItem(SAVE_KEY, JSON.stringify(options))
 }
 
 export const readOptions = (): OptionsToSave | null => {

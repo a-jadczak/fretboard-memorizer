@@ -18,6 +18,7 @@ export const NOTE_SYMBOLS: NoteSymbol[] = [
 	'A#',
 	'B',
 ]
+
 export const NOTE_SYMBOLS_WITH_FLATS: string[] = [
 	'C',
 	'C#/D♭',

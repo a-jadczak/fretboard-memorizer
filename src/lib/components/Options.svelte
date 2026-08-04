@@ -6,6 +6,19 @@
 	import type { NoteSymbol } from '@/lib/types/note-symbol'
 	import type { TunningOptionsKey } from '@/lib/types/tuning-option-key'
 	import type OptionsToSave from '@/lib/types/options-to-save'
+	import SelectField from './SelectField.svelte'
+
+	const INSTRUMENT_OPTIONS: { value: TunningOptionsKey; label: string }[] = [
+		{ value: 'string-1', label: '1 String' },
+		{ value: 'bass-4', label: 'Bass 4 String' },
+		{ value: 'bass-5', label: 'Bass 5 String' },
+		{ value: 'guitar-6', label: 'Guitar 6 String' },
+		{ value: 'guitar-7', label: 'Guitar 7 String' },
+		{ value: 'guitar-8', label: 'Guitar 8 String' },
+	]
+
+	const NOTE_OPTIONS = NOTE_SYMBOLS.map((value) => ({ value, label: value }))
+	const FRET_OPTIONS = ['5', '12', '22', '24'].map((value) => ({ value, label: value }))
 
 	let tunningOptionsMap: Map<string, NoteSymbol[]> = $state(
 		new Map([
@@ -28,12 +41,23 @@
 		saveOptions({ selectedTunningKey, numberOfFrets, selectedSingleNote })
 	}
 
+	const setSelectedTunningAndSave = () => {
+		const newTunning = tunningOptionsMap.get(selectedTunningKey) ?? []
+		setTunningAndSave(newTunning)
+	}
+
+	const setSelectedSingleNoteAndSave = () => {
+		tunningOptionsMap.set(selectedTunningKey, [selectedSingleNote])
+		setTunningAndSave([selectedSingleNote])
+	}
+
 	const setSavedOptions = (savedOptions: OptionsToSave) => {
 		const {
 			selectedTunningKey: newTunningKey,
 			numberOfFrets: newNumberOfFrets,
 			selectedSingleNote: newSingleNote,
 		} = savedOptions
+
 		const newSelectedTunning: NoteSymbol[] = tunningOptionsMap.get(newTunningKey) ?? []
 		const tunning: NoteSymbol[] =
 			newTunningKey === 'string-1' ? [newSingleNote] : newSelectedTunning
@@ -59,69 +83,30 @@
 </script>
 
 <div class="options-container">
-	<div class="field is-grouped is-align-items-center">
-		<label class="label mr-2" for="instrument">Instrument:</label>
-		<div class="control">
-			<div class="select is-primary">
-				<select
-					id="instrument"
-					bind:value={selectedTunningKey}
-					onchange={() => {
-						const newTunning = tunningOptionsMap.get(selectedTunningKey) ?? []
-						setTunningAndSave(newTunning)
-					}}
-				>
-					<option value="string-1">1 String</option>
-					<option value="bass-4">Bass 4 String</option>
-					<option value="bass-5">Bass 5 String</option>
-					<option value="guitar-6">Guitar 6 String</option>
-					<option value="guitar-7">Guitar 7 String</option>
-					<option value="guitar-8">Guitar 8 String</option>
-				</select>
-			</div>
-		</div>
-	</div>
+	<SelectField
+		id="instrument"
+		label="Instrument:"
+		options={INSTRUMENT_OPTIONS}
+		bind:value={selectedTunningKey}
+		onChange={setSelectedTunningAndSave}
+	/>
 
 	{#if selectedTunningKey === 'string-1'}
-		<div class="field is-grouped is-align-items-center">
-			<label class="label mr-2" for="custom-single-note">Custom note:</label>
-			<div class="control">
-				<div class="select is-primary">
-					<select
-						id="custom-single-note"
-						bind:value={selectedSingleNote}
-						onchange={() => {
-							tunningOptionsMap.set(selectedTunningKey, [selectedSingleNote])
-							setTunningAndSave([selectedSingleNote])
-						}}
-					>
-						{#each NOTE_SYMBOLS as note (note)}
-							<option value={note}>{note}</option>
-						{/each}
-					</select>
-				</div>
-			</div>
-		</div>
+		<SelectField
+			id="custom-single-note"
+			label="Custom note:"
+			options={NOTE_OPTIONS}
+			bind:value={selectedSingleNote}
+			onChange={setSelectedSingleNoteAndSave}
+		/>
 	{/if}
 
-	<div class="field is-grouped is-align-items-center mt-2 mb-2">
-		<label class="label mr-2" for="number-of-frets">Number of Frets:</label>
-		<div class="control">
-			<div class="select is-primary">
-				<select
-					id="number-of-frets"
-					bind:value={numberOfFrets}
-					onchange={() => {
-						const newTunning = tunningOptionsMap.get(selectedTunningKey) ?? []
-						setTunningAndSave(newTunning)
-					}}
-				>
-					<option value="5">5</option>
-					<option value="12">12</option>
-					<option value="22">22</option>
-					<option value="24">24</option>
-				</select>
-			</div>
-		</div>
-	</div>
+	<SelectField
+		id="number-of-frets"
+		label="Number of Frets:"
+		options={FRET_OPTIONS}
+		bind:value={numberOfFrets}
+		fieldClass="mt-2 mb-2"
+		onChange={setSelectedTunningAndSave}
+	/>
 </div>
